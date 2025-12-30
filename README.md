@@ -1,6 +1,6 @@
 # **血浆微生物reads中鉴定结构保守的ncRNA**
 
-![image-20251229202952292](/Users/qin/Library/Application Support/typora-user-images/image-20251229202952292.png)
+![image-20251229202952292](未命名.png)
 
 ### 数据前处理（去除接头和低质量reads）+ Mapping
 
