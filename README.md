@@ -1,6 +1,8 @@
 # **血浆微生物reads中鉴定结构保守的ncRNA**
 
-![image-20251229202952292](未命名.png)
+![image-20251229202952292](https://github.com/No-89757/Identification-of-structurally-conserved-ncRNAs-in-plasma-microbial-reads/blob/main/%E6%9C%AA%E5%91%BD%E5%90%8D.png?raw=true)
+
+
 
 ### 数据前处理（去除接头和低质量reads）+ Mapping
 
@@ -522,5 +524,18 @@ diamond blastx \
 cut -f 1  MetaGeneMark_Prodigal_unpredicted_proteins_identified_in_nr_annotation_result.txt  | sort | uniq  > MetaGeneMark_Prodigal_unpredicted_proteins_identified_in_nr_annotation_result.id
 
 comm -2 -3   /lulabdata3/zhangqin/SLE_microbial_ncRNA/Prodigal_MetageneMark_combined_analysis/02_MetaGeneMark_Prodigal_unpredicted_proteins_contigid.txt  MetaGeneMark_Prodigal_unpredicted_proteins_identified_in_nr_annotation_result.txt.id  > MetaGeneMark_Prodigal_unpredicted_proteins_identified_not-in_nr_annotation_result.txt.id
+```
+
+```
+mkdir potential_ncRNA
+cd potential_ncRNA
+
+comm -12 <(sort /lulabdata3/zhangqin/SLE_microbial_ncRNA/nr_annotation/MetaGeneMark_Prodigal_unpredicted_proteins_identified_not-in_nr_annotation_result.id) <(sort /lulabdata3/zhangqin/SLE_microbial_ncRNA/uniref90_annotation/MetaGeneMark_Prodigal_unpredicted_proteins_identified_not-in_uniref90_annotation_result.id) > potential_ncRNA-not-detected-in-nr-uniref90.id
+
+seqkit grep -f potential_ncRNA-not-detected-in-nr-uniref90.id  combined_transcripts.fasta  | seqkit seq -w 0  > potential_ncRNA-not-detected-in-nr-uniref90.fasta
+
+samtools  faidx  potential_ncRNA-not-detected-in-nr-uniref90.fasta
+
+cut -f 2  potential_ncRNA-not-detected-in-nr-uniref90.fasta.fai | sort -n | awk '{print "Contig_"NR "\t" $0}'  | sed '1i Name\tLength'  >   potential_ncRNA-not-detected-in-nr-uniref90_length.txt
 ```
 
